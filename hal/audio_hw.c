@@ -1351,6 +1351,8 @@ int enable_snd_device(struct audio_device *adev,
         audio_extn_dev_arbi_acquire(snd_device);
         amplifier_enable_devices(snd_device, true);
         audio_route_apply_and_update_path(adev->audio_route, device_name);
+        amplifier_set_feedback(adev, snd_device, true);
+
 #ifdef ASUS_TFA98XX_ENABLED
         tfa98xx_start_feedback(adev, snd_device);
 #endif
@@ -1574,6 +1576,7 @@ int disable_snd_device(struct audio_device *adev,
         }
 
         audio_extn_utils_release_snd_device(snd_device);
+        amplifier_set_feedback(adev, snd_device, false);
     } else {
         if (platform_split_snd_device(adev->platform,
                     snd_device,
